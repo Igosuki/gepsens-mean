@@ -41,9 +41,9 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.app %>/**/{,*/}*.jade'],
         tasks: ['jade']
       },
-      compass: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}','<%= yeoman.app %>/lib/**/{,*/}*.{scss,sass}'],
-        tasks: ['compass:server']
+      sass: {
+        files: ['<%= yeoman.app %>/styles/**/{,*/}*.{scss,sass}','<%= yeoman.app %>/lib/**/{,*/}*.{scss,sass}'],
+        tasks: ['sass']
       },
       livereload: {
         files: [
@@ -167,27 +167,16 @@ module.exports = function (grunt) {
         }]
       }
     },
-    compass: {
-      options: {
-        sassDir: '<%= yeoman.app %>/styles',
-        cssDir: '.tmp/styles',
-        generatedImagesDir: '.tmp/images/generated',
-        imagesDir: '<%= yeoman.app %>/images',
-        javascriptsDir: '<%= yeoman.app %>/scripts',
-        fontsDir: '<%= yeoman.app %>/styles/fonts',
-        importPath: '<%= yeoman.app %>/lib',
-        httpImagesPath: '/images',
-        httpGeneratedImagesPath: '/images/generated',
-        httpFontsPath: '/styles/fonts',
-        relativeAssets: false
-      },
-      dist: {},
-      server: {
-        options: {
-          trace: true,
-          debugInfo: true
+    sass: {
+        dist: {
+            options: {
+              includePaths: ['app/lib']
+            },
+            files: {
+                '.tmp/styles/app.css': 'app/styles/app.scss',
+                '.tmp/styles/animate.css': 'app/styles/animate.scss',
+            }
         }
-      }
     },
     // not used since Uglify task does concat,
     // but still available if needed
@@ -309,7 +298,7 @@ module.exports = function (grunt) {
         tasks: [
           'coffee:dist',
           'jade:dist',
-          'compass:server',
+          'sass',
           'nodemon', 
           'watch'
         ],
@@ -320,12 +309,12 @@ module.exports = function (grunt) {
       test: [
         'coffee',
         'jade',
-        'compass'
+        'sass'
       ],
       dist: [
         'coffee',
         'jade',
-        'compass:dist',
+        'sass:dist',
         'imagemin',
         'svgmin',
         'htmlmin'
@@ -386,7 +375,7 @@ module.exports = function (grunt) {
     //'jshint',
     'useminPrepare',
     'coffee',
-    'compass:dist',
+    'sass:dist',
     'imagemin',
     'svgmin',
     'htmlmin',
